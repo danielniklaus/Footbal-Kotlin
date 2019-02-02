@@ -1,10 +1,14 @@
 package com.daniel.footbalaplikasi
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Spinner
@@ -18,30 +22,33 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var spinner: Spinner
 
+    companion object {
+        const val PARCELABLE_DATA="ItemData"
+    }
+    var items:MutableList<ItemData> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-        linearLayout {
-            lparams(width= matchParent, height = wrapContent)
-            orientation = LinearLayout.VERTICAL
-            topPadding = dip(16)
-            leftPadding = dip(16)
-            rightPadding = dip(16)
-            spinner = spinner()
-            swipeRefreshLayout = swipeRefreshLayout {
-                setColorSchemeResources(R.color.colorAccent,
-                    android.R.color.holo_green_light,
-                    android.R.color.holo_orange_light,
-                    android.R.color.holo_red_light)
+        loadData()
 
-                relativeLayout {
-                    lparams(width = matchParent, height = wrapContent)
-                    listTeam = recyclerView{
-                        lparams(width = matchParent, height = wrapContent)
-                        layoutManager = LinearLayoutManager(context)
+    }
+    inner class MainActivityUI(items:List<ItemData>) :AnkoComponent<MainActivity>{
+        override fun createView(ui: AnkoContext<MainActivity>): View {
+            verticalLayout {
+                lparams(matchParent, wrapContent)
+                recyclerView {
+                    layoutManager = LinearLayoutManager(context)
+                    addItemDecoration(DividerItemDecoration(context,1))
+                    adapter = ClubAdapter(items){
+                        startActivity<Detail>(PARCELABLE_DATA)
                     }
                 }
             }
         }
+
     }
+
+    private fun loadData() {
+    }
+
 }
