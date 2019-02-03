@@ -30,17 +30,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadData()
+        MainActivityUI(items).setContentView(this)
 
     }
     inner class MainActivityUI(items:List<ItemData>) :AnkoComponent<MainActivity>{
-        override fun createView(ui: AnkoContext<MainActivity>): View {
+        override fun createView(ui: AnkoContext<MainActivity>)= with(ui) {
             verticalLayout {
                 lparams(matchParent, wrapContent)
                 recyclerView {
                     layoutManager = LinearLayoutManager(context)
                     addItemDecoration(DividerItemDecoration(context,1))
                     adapter = ClubAdapter(items){
-                        startActivity<Detail>(PARCELABLE_DATA)
+                        startActivity<DetailActivity>(PARCELABLE_DATA to it)
                     }
                 }
             }
@@ -49,6 +50,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
+        val image = resources.obtainTypedArray(R.array.club_image)
+        val name = resources.getStringArray(R.array.club_name)
+        val desc  = resources.getStringArray(R.array.club_desc)
+
+        items.clear()
+
+        for (i in name.indices)
+            items.add(ItemData(image.getResourceId(i,0),name[i],desc[i]))
+
+        image.recycle()
     }
 
 }

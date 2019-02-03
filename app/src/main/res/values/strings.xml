@@ -5,4 +5,13 @@
         <item>English League Championship</item>
         <item>German League Championship</item>
     </array>
+    <array name="club_image">
+
+    </array>
+    <array name="club_name">
+
+    </array>
+    <array name="club_desc">
+
+    </array>
 </resources>
